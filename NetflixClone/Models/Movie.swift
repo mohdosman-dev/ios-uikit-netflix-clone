@@ -20,11 +20,11 @@ struct TrendingMovieResponse: Codable {
 // MARK: - Movie
 struct Movie: Codable {
     let adult: Bool
-    let backdropPath: String
+    let backdropPath: String?
     let id: Int
-    let title, originalTitle: String?
+    let title, originalTitle, mediaType: String?
     let originalLanguage, overview: String
-    let posterPath, mediaType: String
+    let posterPath: String
     let genreIDS: [Int]
     let popularity: Double
     let releaseDate: String?

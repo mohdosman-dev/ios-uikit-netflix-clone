@@ -11,6 +11,7 @@ import Foundation
 struct Constants {
     static let API_KEY = "697d439ac993538da4e3e60b54e762cd"
     static let baseURL = "https://api.themoviedb.org"
+    static let baseImageURL = "https://image.tmdb.org/t/p/w500"
     static let YoutubeAPI_KEY = "AIzaSyDqX8axTGeNpXRiISTGL7Tya7fjKJDYi4g"
     static let YoutubeBaseURL = "https://youtube.googleapis.com/youtube/v3/search?"
 }
@@ -56,7 +57,7 @@ class APICaller {
     }
     
     // MARK: getTrendingTvs
-    func getTrendingTvs( complition: @escaping (Result<[Tv], Error>) -> Void) {
+    func getTrendingTvs( complition: @escaping (Result<[Movie], Error>) -> Void) {
         guard let url = URL(string: "\(Constants.baseURL)/3/trending/tv/day") else {
             return
         }
@@ -71,7 +72,7 @@ class APICaller {
                 
                 
                 do {
-                    let result = try JSONDecoder().decode(TrendingTVResponse.self, from: data)
+                    let result = try JSONDecoder().decode(TrendingMovieResponse.self, from: data)
                     complition(.success(result.results))
                     
                 } catch  {
@@ -84,6 +85,93 @@ class APICaller {
         }
         
         
+    }
+    
+    // MARK: getPopular
+    func getPopular( complition: @escaping (Result<[Movie], Error>) -> Void) {
+        guard let url = URL(string: "\(Constants.baseURL)/3/movie/popular") else {
+            return
+        }
+        
+        self.createBaseRequest(with: url) { request in
+            let task = URLSession.shared.dataTask(with: request) { data, _, error in
+                guard let data = data, error == nil else {
+                    debugPrint("Error while fetch trending: \(String(describing: error))")
+                    complition(.failure(APIError.failedToFetchData))
+                    return
+                }
+                
+                
+                do {
+                    let result = try JSONDecoder().decode(TrendingMovieResponse.self, from: data)
+                    complition(.success(result.results))
+                    
+                } catch  {
+                    debugPrint("Error while decoding trending data: \(String(describing: error))")
+                    complition(.failure(error))
+                }
+            }
+            
+            task.resume()
+        }
+    }
+    
+    // MARK: getUpcoming
+    func getUpcoming( complition: @escaping (Result<[Movie], Error>) -> Void) {
+        guard let url = URL(string: "\(Constants.baseURL)/3/movie/upcoming") else {
+            return
+        }
+        
+        self.createBaseRequest(with: url) { request in
+            let task = URLSession.shared.dataTask(with: request) { data, _, error in
+                guard let data = data, error == nil else {
+                    debugPrint("Error while fetch trending: \(String(describing: error))")
+                    complition(.failure(APIError.failedToFetchData))
+                    return
+                }
+                
+                
+                do {
+                    let result = try JSONDecoder().decode(TrendingMovieResponse.self, from: data)
+                    complition(.success(result.results))
+                    
+                } catch  {
+                    debugPrint("Error while decoding trending data: \(String(describing: error))")
+                    complition(.failure(error))
+                }
+            }
+            
+            task.resume()
+        }
+    }
+    
+    // MARK: getTopRated
+    func getTopRated( complition: @escaping (Result<[Movie], Error>) -> Void) {
+        guard let url = URL(string: "\(Constants.baseURL)/3/movie/top_rated") else {
+            return
+        }
+        
+        self.createBaseRequest(with: url) { request in
+            let task = URLSession.shared.dataTask(with: request) { data, _, error in
+                guard let data = data, error == nil else {
+                    debugPrint("Error while fetch trending: \(String(describing: error))")
+                    complition(.failure(APIError.failedToFetchData))
+                    return
+                }
+                
+                
+                do {
+                    let result = try JSONDecoder().decode(TrendingMovieResponse.self, from: data)
+                    complition(.success(result.results))
+                    
+                } catch  {
+                    debugPrint("Error while decoding trending data: \(String(describing: error))")
+                    complition(.failure(error))
+                }
+            }
+            
+            task.resume()
+        }
     }
     
     // MARK: - Private
