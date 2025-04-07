@@ -8,7 +8,7 @@
 import UIKit
 import SDWebImage
 
-class UpcomingTableViewCell: UITableViewCell {
+class MovieTableViewCell: UITableViewCell {
     
     static let identifier = "UpcomingTableViewCell"
     
@@ -73,8 +73,8 @@ class UpcomingTableViewCell: UITableViewCell {
         NSLayoutConstraint.activate(playButtonConstraints)
     }
     
-    public func configure(with model: Movie) {
-        guard let url = URL(string: "\(Constants.baseImageURL)/\(model.posterPath)") else { return }
+    public func configure(with model: MovieViewModel) {
+        guard let url = URL(string: "\(Constants.baseImageURL)/\(model.posterImage)") else { return }
         
         posterImageView.sd_setImage(with: url, completed: nil)
         movieLabel.text = model.title
